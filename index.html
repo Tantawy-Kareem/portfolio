@@ -1,0 +1,3040 @@
+<!DOCTYPE html>
+<!-- 
+  TO REPLACE PLACEHOLDERS WITH REAL PHOTOS:
+  Find each <div class="photo-placeholder" data-photo="PHOTO_ID">
+  and replace with: <img src="your-photo.jpg" alt="caption" class="project-photo">
+  The CSS theming overlays will automatically apply to real <img> tags too.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kareem Ahmed Tantawy — Structural Design Engineer</title>
+  <meta name="description" content="Structural Design Engineer specializing in reinforced concrete design, shop drawings, and BIM modeling. UAE & Egypt projects." />
+
+  <!-- Google Fonts: Distinctive pairing — Bebas Neue (display) + DM Sans (body) + JetBrains Mono (accents) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    /* ============================================================
+       CSS CUSTOM PROPERTIES — Design Tokens
+       Blueprint / Engineering Aesthetics
+    ============================================================ */
+    :root {
+      --navy:        #0A0F1E;
+      --navy-mid:    #101726;
+      --navy-light:  #162033;
+      --navy-card:   #1A2540;
+      --amber:       #E8A027;
+      --amber-dim:   #C4871A;
+      --amber-glow:  rgba(232, 160, 39, 0.12);
+      --steel:       #8A9BB8;
+      --steel-light: #B8C6DC;
+      --white:       #F0F4FC;
+      --white-dim:   #C4CEDF;
+      --grid-line:   rgba(138, 155, 184, 0.08);
+      --grid-accent: rgba(232, 160, 39, 0.06);
+
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body:    'DM Sans', sans-serif;
+      --font-mono:    'JetBrains Mono', monospace;
+
+      --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      --radius: 2px;
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      background-color: var(--navy);
+      color: var(--white-dim);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+      cursor: none; /* custom cursor */
+    }
+
+    /* ============================================================
+       CUSTOM CURSOR
+    ============================================================ */
+    .cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--amber);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      will-change: transform;
+      transform: translate3d(0, 0, 0) scale(1);
+      transition: none;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(232, 160, 39, 0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      will-change: transform;
+      transform: translate3d(0, 0, 0) scale(1);
+      transition: opacity 0.2s ease;
+      opacity: 1;
+    }
+    body:hover .cursor { opacity: 1; }
+
+    /* ============================================================
+       BLUEPRINT GRID BACKGROUND
+       Creates the engineering drawing / technical blueprint feel
+    ============================================================ */
+    .blueprint-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        /* Fine grid */
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+        /* Major grid every 5 cells */
+        linear-gradient(rgba(138,155,184,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(138,155,184,0.04) 1px, transparent 1px);
+      background-size: 30px 30px, 30px 30px, 150px 150px, 150px 150px;
+    }
+
+    /* ============================================================
+       LAYOUT UTILITIES
+    ============================================================ */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+    }
+
+    section {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Section label — engineering drawing reference style */
+    .section-ref {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .section-ref span {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--amber);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .section-ref::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--amber), transparent);
+      opacity: 0.4;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      color: var(--white);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+    }
+
+    .section-title em {
+      color: var(--amber);
+      font-style: normal;
+    }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.25rem 0;
+      background: rgba(10, 15, 30, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(138, 155, 184, 0.1);
+      transition: var(--transition);
+    }
+
+    nav.scrolled {
+      padding: 0.85rem 0;
+      background: rgba(10, 15, 30, 0.97);
+      border-bottom-color: rgba(232, 160, 39, 0.2);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+    }
+    .nav-logo-name {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--white);
+      letter-spacing: 0.08em;
+      line-height: 1;
+    }
+    .nav-logo-title {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--amber);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 0.15rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--steel);
+      text-decoration: none;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color var(--transition);
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0;
+      height: 1px;
+      background: var(--amber);
+      transform: scaleX(0);
+      transition: transform var(--transition);
+    }
+
+    .nav-links a:hover { color: var(--amber); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    .nav-cta {
+      font-family: var(--font-mono) !important;
+      font-size: flex !important;
+      color: var(--navy) !important;
+      background: var(--amber);
+      padding: 0.55rem 1.2rem;
+      border: none;
+      letter-spacing: 0.1em !important;
+    }
+    .nav-cta:hover { background: var(--amber-dim); color: var(--white) !important; }
+    .nav-cta::after { display: none !important; }
+
+    /* Mobile hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--steel);
+      transition: var(--transition);
+    }
+
+    /* Hamburger animation */
+    .nav-toggle.open span:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+    .nav-toggle.open span:nth-child(2) {
+      opacity: 0;
+    }
+    .nav-toggle.open span:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* ============================================================
+       HERO SECTION
+    ============================================================ */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Technical annotation lines — blueprint aesthetic */
+    .hero-annotation {
+      position: absolute;
+      pointer-events: none;
+    }
+    .hero-annotation-tl {
+      top: 8rem; left: 0;
+      width: 200px; height: 200px;
+      border-top: 1px solid rgba(232,160,39,0.2);
+      border-left: 1px solid rgba(232,160,39,0.2);
+    }
+    .hero-annotation-br {
+      bottom: 4rem; right: 0;
+      width: 200px; height: 200px;
+      border-bottom: 1px solid rgba(232,160,39,0.2);
+      border-right: 1px solid rgba(232,160,39,0.2);
+    }
+
+    /* Floating dimension line */
+    .hero-dim-line {
+      position: absolute;
+      right: 3rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+    .hero-dim-line::before,
+    .hero-dim-line::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 120px;
+      background: var(--amber);
+    }
+    .hero-dim-label {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      color: var(--amber);
+      writing-mode: vertical-rl;
+      letter-spacing: 0.1em;
+    }
+
+    .hero-content {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 4rem;
+      align-items: center;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .hero-eyebrow-dot {
+      width: 6px; height: 6px;
+      background: var(--amber);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    .hero-eyebrow-text {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--amber);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    .hero-name {
+      font-family: var(--font-display);
+      font-size: clamp(4rem, 10vw, 9rem);
+      color: var(--white);
+      line-height: 0.88;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-name-highlight {
+      color: transparent;
+      -webkit-text-stroke: 1px var(--amber);
+    }
+
+    .hero-roles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1.5rem 0 2rem;
+    }
+
+    .hero-role-tag {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--navy);
+      background: var(--amber);
+      padding: 0.3rem 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .hero-role-tag.outline {
+      background: transparent;
+      color: var(--amber);
+      border: 1px solid rgba(232,160,39,0.4);
+    }
+
+    .hero-intro {
+      font-size: 1.05rem;
+      color: var(--steel-light);
+      max-width: 540px;
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-intro strong {
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--amber);
+      color: var(--navy);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border: 1px solid var(--amber);
+      transition: var(--transition);
+      cursor: none;
+    }
+    .btn-primary:hover {
+      background: transparent;
+      color: var(--amber);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--steel-light);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      border: 1px solid rgba(138,155,184,0.25);
+      transition: var(--transition);
+      cursor: none;
+    }
+    .btn-secondary:hover {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    /* Hero stats panel */
+    .hero-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border: 1px solid rgba(138,155,184,0.12);
+      background: rgba(26, 37, 64, 0.4);
+      backdrop-filter: blur(10px);
+      min-width: 200px;
+    }
+
+    .hero-stat {
+      padding: 1.5rem 1.75rem;
+      border-bottom: 1px solid rgba(138,155,184,0.1);
+      position: relative;
+    }
+
+    .hero-stat:last-child { border-bottom: none; }
+
+    .hero-stat::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--amber);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.4s ease;
+    }
+
+    .hero-stat:hover::before { transform: scaleY(1); }
+
+    .hero-stat-num {
+      font-family: var(--font-display);
+      font-size: 2.8rem;
+      color: var(--amber);
+      line-height: 1;
+      display: block;
+    }
+
+    .hero-stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--steel);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      display: block;
+      margin-top: 0.25rem;
+    }
+
+    /* Scroll indicator */
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0.4;
+    }
+    .hero-scroll span {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      color: var(--steel);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .hero-scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(var(--steel), transparent);
+      animation: scroll-pulse 2s ease-in-out infinite;
+    }
+    @keyframes scroll-pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    /* ============================================================
+       ABOUT SECTION
+    ============================================================ */
+    #about {
+      padding: 8rem 0;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+      margin-top: 4rem;
+    }
+
+    .about-text p {
+      font-size: 1rem;
+      color: var(--steel-light);
+      line-height: 1.85;
+      margin-bottom: 1.25rem;
+    }
+
+    .about-text p strong {
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .about-highlight {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      border-left: 2px solid var(--amber);
+      background: var(--amber-glow);
+    }
+
+    .about-highlight p {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--amber);
+      letter-spacing: 0.05em;
+      line-height: 1.6;
+      margin: 0 !important;
+    }
+
+    /* Project type list */
+    .about-projects {
+      list-style: none;
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .about-projects li {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--steel-light);
+      letter-spacing: 0.05em;
+    }
+
+    .about-projects li::before {
+      content: '▸';
+      color: var(--amber);
+      font-size: 0.6rem;
+    }
+
+    /* Engineering card panel */
+    .about-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: rgba(138,155,184,0.08);
+      border: 1px solid rgba(138,155,184,0.1);
+    }
+
+    .about-panel-item {
+      background: var(--navy-card);
+      padding: 1.5rem 1.75rem;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .about-panel-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: rgba(138,155,184,0.06);
+    }
+
+    .about-panel-item:hover {
+      background: rgba(26, 37, 64, 0.8);
+    }
+
+    .about-panel-item:hover .panel-icon { color: var(--amber); }
+
+    .panel-icon {
+      font-size: 1.4rem;
+      color: var(--steel);
+      margin-bottom: 0.75rem;
+      transition: color var(--transition);
+    }
+
+    .panel-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--white);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+    }
+
+    .panel-desc {
+      font-size: 0.82rem;
+      color: var(--steel);
+      line-height: 1.6;
+    }
+
+    /* ============================================================
+       SERVICES SECTION
+    ============================================================ */
+    #services {
+      padding: 8rem 0;
+      background: linear-gradient(180deg, transparent, rgba(16,23,38,0.8), transparent);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin-top: 4rem;
+      background: rgba(138,155,184,0.08);
+      border: 1px solid rgba(138,155,184,0.1);
+    }
+
+    .service-card {
+      background: var(--navy-card);
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--amber);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-card:hover { background: var(--navy-light); }
+
+    /* Blueprint circle decoration */
+    .service-num {
+      font-family: var(--font-display);
+      font-size: 5rem;
+      color: rgba(232,160,39,0.06);
+      position: absolute;
+      top: 1rem; right: 1rem;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .service-icon {
+      width: 48px; height: 48px;
+      border: 1px solid rgba(232,160,39,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
+      color: var(--steel);
+      transition: var(--transition);
+      position: relative;
+      z-index: 1;
+    }
+
+    .service-card:hover .service-icon {
+      border-color: var(--amber);
+      background: var(--amber-glow);
+    }
+
+    .service-name {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      color: var(--white);
+      letter-spacing: 0.03em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .service-desc {
+      font-size: 0.85rem;
+      color: var(--steel);
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .service-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .service-tag {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--steel);
+      border: 1px solid rgba(138,155,184,0.2);
+      padding: 0.2rem 0.6rem;
+      letter-spacing: 0.08em;
+    }
+
+    /* ============================================================
+       PROJECTS SECTION
+    ============================================================ */
+    #projects {
+      padding: 8rem 0;
+    }
+
+    .projects-filter {
+      display: flex;
+      gap: 0;
+      margin: 3rem 0;
+      border: 1px solid rgba(138,155,184,0.12);
+      width: fit-content;
+    }
+
+    .filter-btn {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--steel);
+      background: transparent;
+      border: none;
+      border-right: 1px solid rgba(138,155,184,0.12);
+      padding: 0.6rem 1.2rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: none;
+      transition: var(--transition);
+    }
+
+    .filter-btn:last-child { border-right: none; }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: var(--amber);
+      color: var(--navy);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1px;
+      background: rgba(138,155,184,0.06);
+    }
+
+    .project-card {
+      background: var(--navy-card);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: none;
+    }
+
+    .project-card:hover {
+      background: var(--navy-light);
+      transform: translateY(-2px);
+    }
+
+    .project-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--amber), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .project-card:hover::after { transform: scaleX(1); }
+
+    .project-category {
+      margin-top: 3rem;
+    }
+
+    .category-heading {
+      margin-bottom: 1rem;
+    }
+
+    .category-heading span {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--amber);
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+    }
+
+    .photo-gallery {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(300px, 1fr);
+      gap: 1rem;
+      overflow-x: auto;
+      padding-bottom: 0.75rem;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
+      scroll-padding: 2rem;
+      margin-bottom: 3rem;
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      touch-action: pan-y;
+    }
+
+    .photo-gallery.dragging {
+      cursor: grabbing;
+      scroll-behavior: auto;
+      scroll-snap-type: none;
+    }
+
+    .photo-gallery img {
+      user-drag: none;
+      -webkit-user-drag: none;
+    }
+
+    .photo-gallery::-webkit-scrollbar {
+      height: 10px;
+    }
+    .photo-gallery::-webkit-scrollbar-thumb {
+      background: rgba(232,160,39,0.25);
+      border-radius: 999px;
+    }
+    .photo-gallery::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.02);
+    }
+
+    .photo-card {
+      position: relative;
+      min-height: 340px;
+      border-radius: 18px;
+      border: 1px solid rgba(138,155,184,0.12);
+      background: var(--navy-card);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      scroll-snap-align: start;
+      transition: transform var(--transition), border-color var(--transition);
+      cursor: none;
+      pointer-events: auto;
+    }
+    .photo-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(232,160,39,0.5);
+    }
+
+    .photo-container {
+      position: relative;
+      width: 100%;
+      height: 260px;
+      overflow: hidden;
+      border-radius: 16px 16px 0 0;
+    }
+
+    .project-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease, filter 0.4s ease;
+      will-change: transform;
+    }
+
+    .photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(13,15,20,0.3);
+      transition: background var(--transition);
+      pointer-events: none;
+    }
+
+    .photo-gradient {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60%;
+      background: linear-gradient(to top, rgba(13,15,20,0.8) 0%, rgba(200,146,42,0.2) 50%, transparent 100%);
+      opacity: 0.7;
+      transition: opacity var(--transition);
+      pointer-events: none;
+    }
+
+    .photo-info {
+      padding: 1rem 1.2rem 1.2rem;
+      background: rgba(10,15,25,0.9);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform var(--transition), opacity var(--transition);
+    }
+
+    .photo-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--white);
+      margin-bottom: 0.25rem;
+      letter-spacing: 0.02em;
+    }
+
+    .photo-location {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--amber);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .photo-desc {
+      font-size: 0.8rem;
+      color: var(--steel);
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .photo-card:hover .project-photo {
+      transform: scale(1.05);
+    }
+
+    .photo-card:hover .photo-overlay {
+      background: rgba(13,15,20,0.1);
+    }
+
+    .photo-card:hover .photo-gradient {
+      opacity: 1;
+    }
+
+    .photo-card:hover .photo-info {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      backdrop-filter: blur(10px);
+      animation: fadeIn 0.3s ease;
+    }
+    .lightbox.active {
+      display: flex;
+    }
+    .lightbox.fade-out {
+      animation: fadeOut 0.3s ease;
+    }
+
+    .lightbox-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .lightbox.active .lightbox-backdrop {
+      opacity: 1;
+    }
+
+    .lightbox-content {
+      position: relative;
+      width: min(94vw, 1000px);
+      max-height: 92vh;
+      padding: 1rem;
+      display: grid;
+      gap: 1rem;
+      place-items: center;
+      z-index: 2;
+      transform: scale(0.9);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .lightbox.active .lightbox-content {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .lightbox-image-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: var(--navy-card);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 35px 90px rgba(0,0,0,0.55);
+    }
+
+    .lightbox-image {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #0d0f14 0%, #162034 100%);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .lightbox-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .lightbox-caption {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--amber);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-align: center;
+      width: 100%;
+      line-height: 1.5;
+    }
+
+    .lightbox-close,
+    .lightbox-nav {
+      position: absolute;
+      border: 1px solid rgba(232,160,39,0.35);
+      background: rgba(13,15,20,0.9);
+      color: var(--amber);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 1.1rem;
+      cursor: none;
+      transition: transform var(--transition), background var(--transition), border-color var(--transition);
+      z-index: 3;
+    }
+    .lightbox-close:hover,
+    .lightbox-nav:hover {
+      transform: scale(1.05);
+      border-color: var(--amber);
+      background: rgba(232,160,39,0.18);
+    }
+    .lightbox-close {
+      top: -0.5rem;
+      right: -0.5rem;
+    }
+    .lightbox-nav.prev {
+      left: -1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .lightbox-nav.next {
+      right: -1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    @media (max-width: 900px) {
+      .photo-gallery {
+        grid-auto-columns: minmax(240px, 1fr);
+      }
+      .lightbox-content {
+        width: min(96vw, 620px);
+      }
+      .lightbox-nav.prev {
+        left: 0.75rem;
+      }
+      .lightbox-nav.next {
+        right: 0.75rem;
+      }
+    }
+    @media (max-width: 600px) {
+      .photo-gallery {
+        grid-auto-columns: minmax(260px, 1fr);
+      }
+      .photo-card {
+        min-height: 300px;
+      }
+      .lightbox-content {
+        padding: 0.5rem;
+      }
+      .lightbox-close {
+        width: 38px;
+        height: 38px;
+      }
+      .lightbox-nav {
+        width: 38px;
+        height: 38px;
+      }
+    }
+
+    .project-cat {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--amber);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .project-cat::before {
+      content: '';
+      width: 16px;
+      height: 1px;
+      background: var(--amber);
+    }
+
+    .project-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: var(--white);
+      letter-spacing: 0.03em;
+      line-height: 1.1;
+      margin-bottom: 0.75rem;
+    }
+
+    .project-desc {
+      font-size: 0.82rem;
+      color: var(--steel);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+
+    .project-specs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .project-spec {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      color: var(--steel);
+      background: rgba(138,155,184,0.06);
+      border: 1px solid rgba(138,155,184,0.12);
+      padding: 0.2rem 0.6rem;
+      letter-spacing: 0.08em;
+    }
+
+    .project-num {
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      color: rgba(232,160,39,0.05);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       SKILLS SECTION
+    ============================================================ */
+    #skills {
+      padding: 8rem 0;
+      background: linear-gradient(180deg, transparent, rgba(16,23,38,0.6), transparent);
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-top: 4rem;
+    }
+
+    .skills-group-title {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--amber);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(232,160,39,0.2);
+    }
+
+    .skill-item {
+      margin-bottom: 1.75rem;
+    }
+
+    .skill-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .skill-name {
+      font-size: 0.88rem;
+      color: var(--white-dim);
+      font-weight: 400;
+    }
+
+    .skill-level {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--amber);
+      letter-spacing: 0.1em;
+    }
+
+    .skill-bar {
+      height: 2px;
+      background: rgba(138,155,184,0.1);
+      position: relative;
+      overflow: visible;
+    }
+
+    .skill-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--amber), var(--amber-dim));
+      width: 0;
+      transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .skill-bar-fill::after {
+      content: '';
+      position: absolute;
+      right: 0; top: -2px;
+      width: 6px; height: 6px;
+      background: var(--amber);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--amber);
+    }
+
+    /* Software skills — grid of logos */
+    .software-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: rgba(138,155,184,0.08);
+    }
+
+    .software-item {
+      background: var(--navy-card);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: var(--transition);
+    }
+
+    .software-item:hover {
+      background: var(--navy-light);
+    }
+
+    .software-item:hover .software-icon { color: var(--amber); }
+
+    .software-icon {
+      font-size: 1.4rem;
+      color: var(--steel);
+      transition: color var(--transition);
+      min-width: 28px;
+      text-align: center;
+    }
+
+    .software-info { flex: 1; }
+
+    .software-name {
+      font-size: 0.85rem;
+      color: var(--white-dim);
+      font-weight: 400;
+      display: block;
+    }
+
+    .software-category {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      color: var(--steel);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+       WORKFLOW / EXPERIENCE SECTION
+    ============================================================ */
+    #workflow {
+      padding: 8rem 0;
+    }
+
+    .workflow-steps {
+      margin-top: 4rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      position: relative;
+    }
+
+    /* Connecting line */
+    .workflow-steps::before {
+      content: '';
+      position: absolute;
+      top: 2rem;
+      left: calc(12.5% + 1rem);
+      right: calc(12.5% + 1rem);
+      height: 1px;
+      background: linear-gradient(90deg, var(--amber), rgba(232,160,39,0.2));
+    }
+
+    .workflow-step {
+      padding: 0 1.5rem;
+      text-align: center;
+    }
+
+    .workflow-step-num {
+      width: 4rem; height: 4rem;
+      border: 1px solid rgba(232,160,39,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: var(--amber);
+      position: relative;
+      background: var(--navy);
+      transition: var(--transition);
+    }
+
+    .workflow-step:hover .workflow-step-num {
+      background: var(--amber-glow);
+      border-color: var(--amber);
+    }
+
+    .workflow-step-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: var(--white);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .workflow-step-desc {
+      font-size: 0.8rem;
+      color: var(--steel);
+      line-height: 1.65;
+    }
+
+    /* ============================================================
+       CONTACT SECTION
+    ============================================================ */
+    #contact {
+      padding: 8rem 0;
+      background: linear-gradient(180deg, transparent, rgba(16,23,38,0.5));
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      margin-top: 4rem;
+    }
+
+    .contact-info p {
+      font-size: 1rem;
+      color: var(--steel-light);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+
+    .contact-details {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .contact-detail-icon {
+      width: 38px; height: 38px;
+      border: 1px solid rgba(232,160,39,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      color: var(--amber);
+      flex-shrink: 0;
+    }
+
+    .contact-detail-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--steel);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .contact-detail-value {
+      font-size: 0.88rem;
+      color: var(--white-dim);
+    }
+
+    .contact-link {
+      color: var(--amber);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+
+    .contact-link:hover {
+      color: var(--white);
+    }
+
+    /* Contact Form */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .form-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--steel);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .form-input,
+    .form-textarea {
+      background: var(--navy-card);
+      border: 1px solid rgba(138,155,184,0.12);
+      color: var(--white-dim);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      padding: 0.85rem 1rem;
+      width: 100%;
+      outline: none;
+      transition: border-color var(--transition);
+      resize: none;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--amber);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: var(--steel);
+      opacity: 0.5;
+    }
+
+    .form-textarea { min-height: 130px; }
+
+    .form-submit {
+      align-self: flex-start;
+      margin-top: 1rem;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      border-top: 1px solid rgba(138,155,184,0.08);
+      padding: 2.5rem 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--steel);
+      letter-spacing: 0.08em;
+    }
+
+    .footer-tagline {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--amber);
+      letter-spacing: 0.1em;
+      opacity: 0.7;
+    }
+
+    /* ============================================================
+       SCROLL ANIMATIONS
+    ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ============================================================
+       RESPONSIVE — MOBILE
+    ============================================================ */
+    @media (max-width: 900px) {
+      .hero-content { grid-template-columns: 1fr; }
+      .hero-stats { flex-direction: row; flex: none; width: 100%; }
+      .hero-stat { flex: 1; }
+      .hero-dim-line { display: none; }
+
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .workflow-steps { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .workflow-steps::before { display: none; }
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+
+      .nav-links {
+        display: flex;
+        position: fixed;
+        right: -280px;
+        top: 72px;
+        width: 280px;
+        background: rgba(10, 15, 30, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-left: none;
+        border-radius: 16px 0 0 16px;
+        box-shadow: -12px 20px 50px rgba(0, 0, 0, 0.25);
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        padding: 1rem 0.5rem;
+        gap: 0.5rem;
+        z-index: 99;
+        transition: right 0.3s ease;
+      }
+      .nav-links.open {
+        right: 0;
+      }
+      .nav-links a {
+        display: block;
+        width: 100%;
+        font-size: 1.1rem;
+        letter-spacing: 0.12em;
+        color: var(--white-dim);
+        padding: 0.85rem 1rem;
+        text-align: center;
+        text-decoration: none;
+        transition: background 0.2s ease, color 0.2s ease;
+        border-radius: 12px;
+      }
+      .nav-links a:hover,
+      .nav-links a:focus {
+        background: rgba(232, 160, 39, 0.15);
+        color: var(--white);
+      }
+      .nav-toggle { display: flex; z-index: 100; }
+
+      body { cursor: auto; }
+      .cursor, .cursor-ring { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .hero-name { font-size: 3.5rem; }
+      .hero-stats { flex-direction: column; }
+      .workflow-steps { grid-template-columns: 1fr; }
+      .software-grid { grid-template-columns: 1fr; }
+      .projects-filter { flex-wrap: wrap; }
+      .filter-btn { border-right: none; border-bottom: 1px solid rgba(138,155,184,0.12); }
+      .about-projects { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================================
+       CUSTOM CURSOR
+  ============================================================ -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ============================================================
+       BLUEPRINT BACKGROUND GRID
+  ============================================================ -->
+  <div class="blueprint-bg" aria-hidden="true"></div>
+
+  <!-- ============================================================
+       NAVIGATION
+  ============================================================ -->
+  <nav id="navbar">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#hero" class="nav-logo">
+          <span class="nav-logo-name">KT</span>
+          <span class="nav-logo-title">Structural Engineer</span>
+        </a>
+
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#workflow">Workflow</a></li>
+          <li><a href="#contact" class="nav-cta">Contact</a></li>
+        </ul>
+
+        <!-- Mobile toggle -->
+        <div class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       HERO SECTION
+       Strong headline, roles, intro, stats
+  ============================================================ -->
+  <section id="hero">
+    <!-- Blueprint corner annotations -->
+    <div class="hero-annotation hero-annotation-tl" aria-hidden="true"></div>
+    <div class="hero-annotation hero-annotation-br" aria-hidden="true"></div>
+
+    <!-- Engineering dimension line decoration -->
+    <div class="hero-dim-line" aria-hidden="true">
+      <span class="hero-dim-label">STRUCTURAL GRADE</span>
+    </div>
+
+    <div class="container">
+      <div class="hero-content">
+        <!-- Left: Main content -->
+        <div class="hero-left">
+          <div class="hero-eyebrow">
+            <div class="hero-eyebrow-dot"></div>
+            <span class="hero-eyebrow-text">Available for Projects — Egypt, KSA & UAE</span>
+          </div>
+
+          <h1 class="hero-name">
+            KAREEM<br>
+            <span class="hero-name-highlight">TANTAWY</span>
+          </h1>
+
+          <div class="hero-roles">
+            <span class="hero-role-tag">Structural Design</span>
+            <span class="hero-role-tag outline">Shop Drawings</span>
+            <span class="hero-role-tag outline">BIM Engineer</span>
+          </div>
+
+          <p class="hero-intro">
+            Civil Engineer with deep expertise in <strong>reinforced concrete design</strong>,
+            <strong>structural analysis</strong>, and full-package <strong>shop drawing production</strong>.
+            Turning complex visions into precision-built structures — serving military, high-rise, residential, 
+            and landmark projects throughout the UAE & KSA.
+
+          </p>
+
+          <div class="hero-ctas">
+            <a href="#projects" class="btn-primary">
+              <span>View Projects</span>
+              <span>→</span>
+            </a>
+            <a href="#contact" class="btn-secondary">
+              <span>Get In Touch</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Stats panel -->
+        <div class="hero-stats reveal reveal-delay-2">
+          <div class="hero-stat">
+            <span class="hero-stat-num">7+</span>
+            <span class="hero-stat-label">Years Experience</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-num">60+</span>
+            <span class="hero-stat-label">Projects Delivered</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-num">3</span>
+            <span class="hero-stat-label">Core Disciplines</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-num">8</span>
+            <span class="hero-stat-label">Software Tools</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll prompt -->
+    <div class="hero-scroll" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="hero-scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ABOUT SECTION
+  ============================================================ -->
+  <section id="about">
+    <div class="container">
+      <div class="section-ref">
+        <span>SEC-01 / PROFILE</span>
+      </div>
+      <h2 class="section-title reveal">Built on <em>Precision.</em><br>Driven by Detail.</h2>
+
+      <div class="about-grid">
+        <!-- Left: Text -->
+        <div class="about-text reveal">
+          <p>
+            I am <strong>Kareem Ahmed Tantawy</strong>, a Civil Engineer with focused expertise across three interlocking disciplines:
+            structural design, shop drawing production, and BIM modeling. My work doesn't stop at calculations
+            — it extends through every drawing, every coordination clash, every detail that makes a structure buildable.
+          </p>
+          <p>
+            I've contributed to structurally demanding projects including <strong>military facilities</strong> requiring strict
+            compliance, <strong>high-rise residential towers</strong> with complex lateral load systems, <strong>luxury villas</strong>,
+            and projects across the <strong>UAE & KSA</strong> where international standards and delivery precision are non-negotiable.
+          </p>
+          <p>
+            Whether I'm running a finite element model in ETABS, coordinating discipline clashes in Revit, or finalizing
+            reinforcement layouts in ASD — my goal is always the same: <strong>drawings that build correctly, the first time.</strong>
+          </p>
+
+          <div class="about-highlight">
+            <p>
+              "Precision in calculation. Clarity in documentation. Safety in execution."
+            </p>
+          </div>
+
+          <ul class="about-projects">
+            <li>Military Base Facilities</li>
+            <li>Residential Villas</li>
+            <li>High-Rise Buildings</li>
+            <li>Notional Parks</li>
+            <li>UAE / Emirates Projects</li>
+            <li>KSA / Saudi Arabia Projects</li>
+          </ul>
+        </div>
+
+        <!-- Right: Discipline panel -->
+        <div class="about-panel reveal reveal-delay-2">
+          <div class="about-panel-item">
+            <div class="panel-icon"><i class="fa-solid fa-building"></i></div>
+            <div class="panel-title">Structural Design</div>
+            <div class="panel-desc">
+              Full structural analysis and RC design — slabs, beams, columns, foundations, shear walls.
+              Verified using ETABS, SAFE, and SAP2000 to international codes.
+            </div>
+          </div>
+          <div class="about-panel-item">
+            <div class="panel-icon"><i class="fa-solid fa-file-lines"></i></div>
+            <div class="panel-title">Shop Drawings</div>
+            <div class="panel-desc">
+              Production of complete, detailed structural drawing packages using ASD, and Revit. 
+              Dimensioned, annotated, and construction-ready.
+            </div>
+          </div>
+          <div class="about-panel-item">
+            <div class="panel-icon"><i class="fa-solid fa-cube"></i></div>
+            <div class="panel-title">BIM Modeling</div>
+            <div class="panel-desc">
+              3D structural modeling in Autodesk Revit for coordination, clash detection,
+              quantity extraction, and shop drawing generation.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SERVICES SECTION
+  ============================================================ -->
+  <section id="services">
+    <div class="container">
+      <div class="section-ref">
+        <span>SEC-02 / SERVICES</span>
+      </div>
+      <h2 class="section-title reveal">What I <em>Deliver.</em></h2>
+
+      <div class="services-grid reveal">
+        <!-- Service 1: Structural Design -->
+        <div class="service-card">
+          <div class="service-num">01</div>
+          <div class="service-icon"><i class="fa-solid fa-building"></i></div>
+          <div class="service-name">Structural<br>Design</div>
+          <p class="service-desc">
+            Complete structural analysis and reinforced concrete design for buildings of all
+            typologies. From preliminary sizing through final calculations and design reports,
+            compliant with Egyptian and international codes.
+          </p>
+          <div class="service-tags">
+            <span class="service-tag">ETABS</span>
+            <span class="service-tag">SAFE</span>
+            <span class="service-tag">SAP2000</span>
+            <span class="service-tag">CSI Column</span>
+            <span class="service-tag">Prokon</span>
+          </div>
+        </div>
+
+        <!-- Service 2: Shop Drawings -->
+        <div class="service-card">
+          <div class="service-num">02</div>
+          <div class="service-icon"><i class="fa-solid fa-file-lines"></i></div>
+          <div class="service-name">Shop<br>Drawings</div>
+          <p class="service-desc">
+            Full structural drawing packages ready for construction — reinforcement layouts,
+            slab plans, beam schedules, column details, foundation plans.
+            Precision-drawn, fully dimensioned, ready for contractor use.
+          </p>
+          <div class="service-tags">
+            <span class="service-tag">AutoCAD</span>
+            <span class="service-tag">ASD</span>
+            <span class="service-tag">Revit</span>
+            <span class="service-tag">BBS</span>
+            <span class="service-tag">Bending Details</span>
+          </div>
+        </div>
+
+        <!-- Service 3: BIM -->
+        <div class="service-card">
+          <div class="service-num">03</div>
+          <div class="service-icon"><i class="fa-solid fa-cube"></i></div>
+          <div class="service-name">BIM<br>Modeling</div>
+          <p class="service-desc">
+            Intelligent 3D structural models in Autodesk Revit for design coordination,
+            clash detection with MEP/Architectural disciplines, quantity takeoffs,
+            and automated drawing production.
+          </p>
+          <div class="service-tags">
+            <span class="service-tag">Revit Structural</span>
+            <span class="service-tag">Navisworks</span>
+            <span class="service-tag">Coordination</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PROJECTS SECTION
+  ============================================================ -->
+  <section id="projects">
+    <div class="container">
+      <div class="section-ref">
+        <span>SEC-03 / PORTFOLIO</span>
+      </div>
+      <h2 class="section-title reveal">Structural <em>Gallery.</em></h2>
+
+      <div class="project-category reveal">
+        <div class="category-heading"><span>— General PROJECTS</span></div>
+        <div class="photo-gallery">
+          <button class="photo-card" data-gallery="emirates" data-title="Grand Facade" data-location="Karbala, Iraq" data-description="Karbala Court Complex, A large-scale judicial facility consisting of three distinct structures—Madani, Gazaea, and Presidency—integrated via a massive reinforced concrete framing system. The complex features a highly symmetric layout, wide internal spans for the court halls, and a prominent multi-tiered central entrance archway.">
+            <div class="photo-container">
+              <img src="assets\Projects\GENERAL_PROJECTS\CARBALA.png" alt="Grand Facade" class="project-photo" loading="lazy">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <div class="photo-title">KARBALA COURT</div>
+              <div class="photo-location">Iraq, Karbala</div>
+              <p class="photo-desc">A large-scale judicial facility consisting of three distinct structures—Madani, Gazaea, and Presidency—integrated via a massive reinforced concrete framing system. The complex features a highly symmetric layout, wide internal spans for the court halls, and a prominent multi-tiered central entrance archway.</p>
+            </div>
+          </button>
+ 
+          <button class="photo-card" data-gallery="emirates" data-title="Warehouse" data-location="Dubai, UAE" data-description="Commercial Logistics Warehouse, A high-volume industrial building utilizing a heavy-duty structural steel framing system to achieve expansive open internal spans. The structure is engineered to handle substantial wind and thermal loads, incorporating integrated portal frames for heavy shipping docks, a lightweight metal roofing system, and dedicated reinforced loading zones.">
+            <div class="photo-container">
+              <img src="assets\Projects\GENERAL_PROJECTS\RAQ DUBAI SOUTH-20250601.png" alt="Warehouse" class="project-photo" loading="lazy">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <div class="photo-title">Warehouse</div>
+              <div class="photo-location">Dubai, UAE</div>
+              <p class="photo-desc">Commercial Logistics Warehouse, A high-volume industrial building utilizing a heavy-duty structural steel framing system to achieve expansive open internal spans. The structure is engineered to handle substantial wind and thermal loads, incorporating integrated portal frames for heavy shipping docks, a lightweight metal roofing system, and dedicated reinforced loading zones.</p>
+            </div>
+          </button>
+
+          <button class="photo-card" data-gallery="emirates" data-title="Sports Center" data-location="Dubai, UAE" data-description="A large-scale athletic facility featuring a multi-story framing system designed with extensive clear heights and a regular perimeter column layout. The structure integrates deep-beam configurations to accommodate massive, long-span indoor playing courts, a continuous upper-level curtain wall system, and specialized roof truss load distributions.">
+            <div class="photo-container">
+              <img src="assets\Projects\GENERAL_PROJECTS\sports-center.png" alt="Sports Center" class="project-photo" loading="lazy">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <div class="photo-title">Sports Center</div>
+              <div class="photo-location">Dubai, UAE</div>
+              <p class="photo-desc">A large-scale athletic facility featuring a multi-story framing system designed with extensive clear heights and a regular perimeter column layout. The structure integrates deep-beam configurations to accommodate massive, long-span indoor playing courts, a continuous upper-level curtain wall system, and specialized roof truss load distributions.</p>
+            </div>
+          </button>
+
+          <button class="photo-card" data-gallery="emirates" data-title="Mosque" data-location="Dubai, UAE" data-description="A single-story structure featuring a wide-span prayer hall designed with a column-free interior layout. The framing system is engineered to seamlessly support the dead loads of multiple roof dome assemblies, an integrated entrance portico, and heavy external stone cladding panels.">
+            <div class="photo-container">
+              <img src="assets\Projects\GENERAL_PROJECTS\mosque.png" alt="Mosque" class="project-photo" loading="lazy">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <div class="photo-title">Mosque</div>
+              <div class="photo-location">Dubai, UAE</div>
+              <p class="photo-desc">A single-story structure featuring a wide-span prayer hall designed with a column-free interior layout. The framing system is engineered to seamlessly support the dead loads of multiple roof dome assemblies, an integrated entrance portico, and heavy external stone cladding panels.</p>
+            </div>
+          </button>
+
+          <button class="photo-card" data-gallery="emirates" data-title="Adnoc Station" data-location="Dubai, UAE" data-description="A retail building utilizing a robust reinforced concrete design optimized for commercial utility layouts. The structural engineering accounts for high-capacity flat roof slab loads to support an array of mechanical equipment, solid perimeter wall columns, and specialized wide openings for the storefront glazing.">
+            <div class="photo-container">
+              <img src="assets\Projects\GENERAL_PROJECTS\Adnoc-Station.jpg" alt="Adnoc Station" class="project-photo" loading="lazy">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <div class="photo-title">Adnoc Station</div>
+              <div class="photo-location">Dubai, UAE</div>
+              <p class="photo-desc">A retail building utilizing a robust reinforced concrete design optimized for commercial utility layouts. The structural engineering accounts for high-capacity flat roof slab loads to support an array of mechanical equipment, solid perimeter wall columns, and specialized wide openings for the storefront glazing.</p>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div class="project-category reveal">
+        <div class="category-heading"><span>— HIGH-RISE BUILDINGS</span></div>
+        <div class="photo-gallery">
+          <button class="photo-card" data-gallery="highrise" data-title="Al-Sahafa" data-location="Abu Dhabi, UAE" data-description="28-storey residential tower & 5 under ground basements structural design, featuring outrigger systems and tuned mass dampers for wind resistance in high-wind conditions.">
+            <div class="photo-container">
+              <img src="assets\Projects\HIGH_RISE_BUILDINGS\Al-Sahafa.jpg" alt="Al-Sahafa" class="project-photo" loading="lazy">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <div class="photo-title">Al-Sahafa</div>
+              <div class="photo-location">Abu Dhabi, UAE</div>
+              <p class="photo-desc">28-storey residential tower & 5 under ground basements structural design, featuring outrigger systems and tuned mass dampers for wind resistance in high-wind conditions.</p>
+            </div>
+          </button>
+          
+          <button class="photo-card" data-gallery="highrise" data-title="Hilla Hotel" data-location="Makkah, Saudi Arabia" data-description="Makkah Hotel Project (Hayla) is a three-star hotel in the Kingdom of Saudi Arabia, Makkah Al-Mukarramah, Southern Aziziyah District. The site area is approximately 900 m. The built-up area of ​​the project is 15,000 m. The number of 140 hotel residential units is approximately 420 people. The estimated cost of the project is 80 million riyals.">
+            <div class="photo-container">
+              <img src="assets\Projects\HIGH_RISE_BUILDINGS\Hilla-Hotel.jpg" alt="Hilla Hotel" class="project-photo" loading="lazy">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <div class="photo-title">Hilla Hotel</div>
+              <div class="photo-location">Makkah, Saudi Arabia</div>
+              <p class="photo-desc">Makkah Hotel Project (Hayla) is a three-star hotel in the Kingdom of Saudi Arabia, Makkah Al-Mukarramah, Southern Aziziyah District. The site area is approximately 900 m. The built-up area of ​​the project is 15,000 m. The number of 140 hotel residential units is approximately 420 people. The estimated cost of the project is 80 million riyals.</p>
+            </div>
+          </button>
+          
+          <button class="photo-card" data-gallery="highrise" data-title="Dubai Resort" data-location="Dubai, UAE" data-description="A modern mid-rise coastal resort and apartment complex designed with a tiered layout. The building stands out with its multi-level swimming pools—including a large cantilevered pool deck on the lower podium and a rooftop pool—extensive landscaping, and floor-to-ceiling glass facades offering wide views.">
+            <div class="photo-container">
+              <img src="assets\Projects\HIGH_RISE_BUILDINGS\dubai-tower.png" alt="Dubai Resort" class="project-photo" loading="lazy">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <div class="photo-title">Dubai Resort</div>
+              <div class="photo-location">Dubai, UAE</div>
+              <p class="photo-desc">A modern mid-rise coastal resort and apartment complex designed with a tiered layout. The building stands out with its multi-level swimming pools—including a large cantilevered pool deck on the lower podium and a rooftop pool—extensive landscaping, and floor-to-ceiling glass facades offering wide views.</p>
+            </div>
+          </button>
+        </div>
+      </div>
+  
+      <div class="project-category reveal">
+        <div class="category-heading"><span>— RESIDENTIAL VILLA PROJECTS</span></div>
+        <div class="photo-gallery">
+          <button class="photo-card" data-gallery="villa" data-title="Al Areed" data-location="Riyadh, KSA" data-description="Riyadh Residential complex containing residential apartments and villas Total number of units 130 units Site area 6000 m2 Total built-up area 13500 m2.">
+            <div class="photo-container">
+              <img src="assets\Projects\VILLAS\Al-Areed.jpg" alt="Al Areed" class="project-photo" loading="lazy">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <div class="photo-title">Al Areed</div>
+              <div class="photo-location">Riyadh, KSA</div>
+              <p class="photo-desc">Riyadh Residential complex containing residential apartments and villas Total number of units 130 units Site area 6000 m2 Total built-up area 13500 m2.</p>
+            </div>
+          </button>
+          <button class="photo-card" data-gallery="villa" data-title="CASA FAROUK" data-location="Cairo, EGYPT" data-description="A luxury tiered villa with a custom design integrated into sloped sandy terrain. The layout requires advanced retaining systems for slope stability and complex cantilevered slabs to support deep terraces and roof planters while preserving unobstructed panoramic glazing.">
+            <div class="photo-container">
+              <img src="assets\Projects\VILLAS\CASA-FAROUK.png" alt="CASA FAROUK" class="project-photo" loading="lazy">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <div class="photo-title">CASA FAROUK</div>
+              <div class="photo-location">Cairo, EGYPT</div>
+              <p class="photo-desc">A luxury tiered villa with a custom design integrated into sloped sandy terrain. The layout requires advanced retaining systems for slope stability and complex cantilevered slabs to support deep terraces and roof planters while preserving unobstructed panoramic glazing.</p>
+            </div>
+          </button>
+          <button class="photo-card" data-gallery="villa" data-title="Al Rawda" data-location="Riyadh, KSA" data-description="Project Details Al Rawda District Residential Complex Location: Kingdom of Saudi Arabia – Riyadh Story villas 30 residential units Site area 2500 m2 Total built-up area 3,750 m2.">
+            <div class="photo-container">
+              <img src="assets\Projects\VILLAS\Al-Rawda.jpg" alt="Al Rawda" class="project-photo" loading="lazy">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <div class="photo-title">Al Rawda</div>
+              <div class="photo-location">Riyadh, KSA</div>
+              <p class="photo-desc">Al Rawda District Residential Complex Location: Kingdom of Saudi Arabia – Riyadh Story villas 30 residential units Site area 2500 m2 Total built-up area 3,750 m2.</p>
+            </div>
+          </button>
+          <button class="photo-card" data-gallery="villa" data-title="CUBIC PRIVATE STORAGE" data-location="Riyadh, KSA" data-description="Complex structural framing for waterfront villa, incorporating seismic-resistant design and wind load calculations for coastal conditions.">
+            <div class="photo-container">
+              <img src="assets\Projects\VILLAS\CUBIC_PRIVATE_STORAGE.png" alt="CUBIC PRIVATE STORAGE" class="project-photo" loading="lazy">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <div class="photo-title">CUBIC PRIVATE STORAGE</div>
+              <div class="photo-location">Riyadh, KSA</div>
+              <p class="photo-desc">Detailed sectional drawings for luxury villa construction, showing reinforcement layouts and connection details for architectural features.</p>
+            </div>
+          </button>
+          <button class="photo-card" data-gallery="villa" data-title="King Faisal" data-location="Riyadh, KSA" data-description="Detailed sectional drawings for luxury villa construction, showing reinforcement layouts and connection details for architectural features.">
+            <div class="photo-container">
+              <img src="assets\Projects\VILLAS\King_Faisal.png" alt="King Faisal" class="project-photo" loading="lazy">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <div class="photo-title">King Faisal</div>
+              <div class="photo-location">Riyadh, KSA</div>
+              <p class="photo-desc">King Faisal District Residential Complex Location: Kingdom of Saudi Arabia – Riyadh Story villas Site area 4500 m2 Total built-up area 5,250 m2.</p>
+            </div>
+          </button>
+          <button class="photo-card" data-gallery="villa" data-title="SANA TYPE B" data-location="Riyadh, KSA" data-description="Fabrication drawings for custom steel elements in luxury villa, including staircase details and ornamental structural components.">
+            <div class="photo-container">
+              <img src="assets\Projects\VILLAS\SANA_TYPEB.png" alt="SANA TYPE B" class="project-photo" loading="lazy">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <div class="photo-title">SANA TYPE B</div>
+              <div class="photo-location">Riyadh, KSA</div>
+              <p class="photo-desc">SANA TYPE B Riyadh Residential complex residential villas Site area 680 m2 Total built-up area 450 m2.</p>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div class="project-category reveal">
+        <div class="category-heading"><span>— MILITARY PROJECTS</span></div>
+        <div class="photo-gallery" data-gallery="military">
+    
+          <button class="photo-card" data-gallery="military" data-title="FAC01-Pro Civil" data-location="Dubai, UAE" data-description="A mid-rise reinforced concrete facility engineered with a highly rigid, repetitive column layout for direct load paths. The heavy-duty floor slabs and robust flat roof deck transfer uniform live and dead loads safely down to deep foundations.">
+            <div class="photo-container">
+              <img src="assets\Projects\MILITARY_PROJECTS\fac01-pro-civil.png" alt="Military Base Complex - Site Layout" loading="lazy" class="project-photo">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <h3 class="photo-title">FAC01-Pro Civil</h3>
+              <p class="photo-location">Dubai, UAE</p>
+              <p class="photo-desc">A mid-rise reinforced concrete facility engineered with a highly rigid, repetitive column layout for direct load paths. The heavy-duty floor slabs and robust flat roof deck transfer uniform live and dead loads safely down to deep foundations.</p>
+            </div>
+          </button>
+    
+          <button class="photo-card" data-gallery="military" data-title="FAC01-Silver Coast" data-location="Dubai, UAE" data-description="A single-story, T-shaped military building with a stately institutional design. The facade features beige stone panels contrasted by strong green columns. It includes a formal corner entrance with a military crest, a flat roof with linear skylights, and a neatly landscaped courtyard.">
+            <div class="photo-container">
+              <img src="assets\Projects\MILITARY_PROJECTS\fac01-silver-coast.png" alt="Military Base Complex - Site Layout" loading="lazy" class="project-photo">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <h3 class="photo-title">FAC01-Silver Coast</h3>
+              <p class="photo-location">Dubai, UAE</p>
+              <p class="photo-desc">A single-story, T-shaped military building with a stately institutional design. The facade features beige stone panels contrasted by strong green columns. It includes a formal corner entrance with a military crest, a flat roof with linear skylights, and a neatly landscaped courtyard.</p>
+            </div>
+          </button>
+          
+          <button class="photo-card" data-gallery="military" data-title="FAC02-Trojan" data-location="Dubai, UAE" data-description="A two-story institutional building utilizing a regular grid layout. The main structural challenges involve managing the massive flat roof deck loads alongside severe regional thermal expansion. Additionally, the engineering design must handle heavy dead loads from the cantilevered exterior walkways and safely transfer forces around the open, recessed entrance columns.">
+            <div class="photo-container">
+              <img src="assets\Projects\MILITARY_PROJECTS\fac02-Trojan.jpeg" alt="Military Base Complex - Site Layout" loading="lazy" class="project-photo">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <h3 class="photo-title">FAC02-Trojan</h3>
+              <p class="photo-location">Dubai, UAE</p>
+              <p class="photo-desc">A two-story institutional building utilizing a regular grid layout. The main structural challenges involve managing the massive flat roof deck loads alongside severe regional thermal expansion. Additionally, the engineering design must handle heavy dead loads from the cantilevered exterior walkways and safely transfer forces around the open, recessed entrance columns.</p>
+            </div>
+          </button>
+    
+          <button class="photo-card" data-gallery="military" data-title="FAC03-PGC" data-location="Dubai, UAE" data-description="A two-story institutional building designed with an elongated rectangular footprint. The main engineering challenges involve managing heavy dead loads from the asymmetrical rooftop bulkhead structure alongside significant regional thermal expansion. The layout also requires carefully reinforcing the expansive, flat roof slab while maintaining continuous, open interior office spans.">
+            <div class="photo-container">
+              <img src="assets\Projects\MILITARY_PROJECTS\Fac03-PGC.jpeg" alt="Military Base Complex - Site Layout" loading="lazy" class="project-photo">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <h3 class="photo-title">FAC03-PGC</h3>
+              <p class="photo-location">Dubai, UAE</p>
+              <p class="photo-desc">A two-story institutional building designed with an elongated rectangular footprint. The main engineering challenges involve managing heavy dead loads from the asymmetrical rooftop bulkhead structure alongside significant regional thermal expansion. The layout also requires carefully reinforcing the expansive, flat roof slab while maintaining continuous, open interior office spans.</p>
+            </div>
+          </button>
+          
+          <button class="photo-card" data-gallery="military" data-title="FAC04-Aims" data-location="Dubai, UAE" data-description="A secure three-story institutional outpost. The main engineering challenges involve designing a robust foundation to prevent settlement of a vertical structure on desert soils. Additionally, the design must handle localized dead loads from roof-mounted defense systems, solar equipment, and heavy roof planter boxes while managing thermal expansion.">
+            <div class="photo-container">
+              <img src="assets\Projects\MILITARY_PROJECTS\Fac04-Aims.png" alt="Military Base Complex - Site Layout" loading="lazy" class="project-photo">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <h3 class="photo-title">FAC04-Aims</h3>
+              <p class="photo-location">Dubai, UAE</p>
+              <p class="photo-desc">A secure three-story institutional outpost. The main engineering challenges involve designing a robust foundation to prevent settlement of a vertical structure on desert soils. Additionally, the design must handle localized dead loads from roof-mounted defense systems, solar equipment, and heavy roof planter boxes while managing thermal expansion.</p>
+            </div>
+          </button>
+    
+          <button class="photo-card" data-gallery="military" data-title="FAC05-Tahnoon" data-location="Dubai, UAE" data-description="A two-story military building featuring an expansive, multi-wing layout. The main engineering challenges involve detailing complex panel-to-panel joints for the heavy exterior precast concrete cladding while preventing water infiltration. The design must also control significant thermal expansion across the large, sun-exposed concrete flat roof surfaces.">
+            <div class="photo-container">
+              <img src="assets\Projects\MILITARY_PROJECTS\fac05-Tahnoon.png" alt="Military Base Complex - Site Layout" loading="lazy" class="project-photo">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <h3 class="photo-title">FAC05-Tahnoon</h3>
+              <p class="photo-location">Dubai, UAE</p>
+              <p class="photo-desc">A two-story military building featuring an expansive, multi-wing layout. The main engineering challenges involve detailing complex panel-to-panel joints for the heavy exterior precast concrete cladding while preventing water infiltration. The design must also control significant thermal expansion across the large, sun-exposed concrete flat roof surfaces.</p>
+            </div>
+          </button>
+    
+          <button class="photo-card" data-gallery="military" data-title="FAC06-Electron" data-location="Dubai, UAE" data-description="A single-level military storage structure. The primary engineering challenges involve designing a heavy-duty ground slab to support concentrated live loads from stacked supply crates and logistics machinery. Additionally, the structure must accommodate large, closely spaced portal openings for the rolling doors without compromising perimeter wall load capacity.">
+            <div class="photo-container">
+              <img src="assets\Projects\MILITARY_PROJECTS\fac06-Electron.png" alt="Military Base Complex - Site Layout" loading="lazy" class="project-photo">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <h3 class="photo-title">FAC06-Electron</h3>
+              <p class="photo-location">Dubai, UAE</p>
+              <p class="photo-desc">A single-level military storage structure. The primary engineering challenges involve designing a heavy-duty ground slab to support concentrated live loads from stacked supply crates and logistics machinery. Additionally, the structure must accommodate large, closely spaced portal openings for the rolling doors without compromising perimeter wall load capacity.</p>
+            </div>
+          </button>
+    
+          <button class="photo-card" data-gallery="military" data-title="FAC15-Gulf Eagle" data-location="Dubai, UAE" data-description="A two-story institutional facility with an asymmetric upper floor layout. The main structural engineering challenges involve reinforcing the flat roof slab to handle substantial concentrated dead loads from multiple HVAC condenser units and a large water storage tank, alongside managing thermal stresses across the exposed concrete decks.">
+            <div class="photo-container">
+              <img src="assets\Projects\MILITARY_PROJECTS\fac15-Gulf Eagle.png" alt="Military Base Complex - Site Layout" loading="lazy" class="project-photo">
+              <div class="photo-overlay"></div>
+              <div class="photo-gradient"></div>
+            </div>
+            <div class="photo-info">
+              <h3 class="photo-title">FAC15-Gulf Eagle</h3>
+              <p class="photo-location">Dubai, UAE</p>
+              <p class="photo-desc">A two-story institutional facility with an asymmetric upper floor layout. The main structural engineering challenges involve reinforcing the flat roof slab to handle substantial concentrated dead loads from multiple HVAC condenser units and a large water storage tank, alongside managing thermal stresses across the exposed concrete decks.</p>
+            </div>
+          </button>
+        
+        </div>
+      </div>
+
+    </div>
+  </section>
+  
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lightbox-backdrop" id="lightboxBackdrop"></div>
+    <div class="lightbox-content" role="dialog" aria-modal="true">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Close gallery">✕</button>
+      <div class="lightbox-image-wrapper">
+        <div class="lightbox-image" id="lightboxImage"></div>
+      </div>
+      <div class="lightbox-caption" id="lightboxCaption"></div>
+      <button class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous photo">‹</button>
+      <button class="lightbox-nav next" id="lightboxNext" aria-label="Next photo">›</button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SKILLS SECTION
+  ============================================================ -->
+  <section id="skills">
+    <div class="container">
+      <div class="section-ref">
+        <span>SEC-04 / TECHNICAL COMPETENCY</span>
+      </div>
+      <h2 class="section-title reveal">Skills &amp; <em>Tools.</em></h2>
+
+      <div class="skills-grid">
+        <!-- Technical Skills -->
+        <div class="reveal">
+          <div class="skills-group-title">// Technical Skills</div>
+
+          <div class="skill-item">
+            <div class="skill-header">
+              <span class="skill-name">Structural Analysis &amp; Design</span>
+              <span class="skill-level">Expert</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-width="95"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-header">
+              <span class="skill-name">Reinforced Concrete Design</span>
+              <span class="skill-level">Expert</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-width="95"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-header">
+              <span class="skill-name">Shop Drawing Production</span>
+              <span class="skill-level">Expert</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-width="92"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-header">
+              <span class="skill-name">BIM Modeling (Revit)</span>
+              <span class="skill-level">Advanced</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-width="88"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-header">
+              <span class="skill-name">Foundation &amp; Geotechnical Integration</span>
+              <span class="skill-level">Advanced</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-width="82"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-header">
+              <span class="skill-name">Multi-Discipline Coordination</span>
+              <span class="skill-level">Advanced</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-width="80"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Software Skills -->
+        <div class="reveal reveal-delay-2">
+          <div class="skills-group-title">// Software Proficiency</div>
+
+          <div class="software-grid">
+            <div class="software-item">
+              <div class="software-icon"><i class="fa-solid fa-cube"></i></div>
+              <div class="software-info">
+                <span class="software-name">Autodesk Revit</span>
+                <span class="software-category">BIM / Shop Drawings</span>
+              </div>
+            </div>
+            <div class="software-item">
+              <div class="software-icon"><i class="fa-solid fa-chart-line"></i></div>
+              <div class="software-info">
+                <span class="software-name">CSI ETABS</span>
+                <span class="software-category">Structural Analysis</span>
+              </div>
+            </div>
+            <div class="software-item">
+              <div class="software-icon"><i class="fa-solid fa-drafting-compass"></i></div>
+              <div class="software-info">
+                <span class="software-name">AutoCAD</span>
+                <span class="software-category">2D Drafting</span>
+              </div>
+            </div>
+            <div class="software-item">
+              <div class="software-icon"><i class="fa-solid fa-layer-group"></i></div>
+              <div class="software-info">
+                <span class="software-name">CSI SAFE</span>
+                <span class="software-category">Slab &amp; Foundation</span>
+              </div>
+            </div>
+            <div class="software-item">
+              <div class="software-icon"><i class="fa-solid fa-pen-ruler"></i></div>
+              <div class="software-info">
+                <span class="software-name">ASD (AutoCAD Structural)</span>
+                <span class="software-category">Structural Detailing</span>
+              </div>
+            </div>
+            <div class="software-item">
+              <div class="software-icon"><i class="fa-solid fa-circle-nodes"></i></div>
+              <div class="software-info">
+                <span class="software-name">CSI SAP2000</span>
+                <span class="software-category">Advanced Analysis</span>
+              </div>
+            </div>
+            <div class="software-item">
+              <div class="software-icon"><i class="fa-solid fa-calculator"></i></div>
+              <div class="software-info">
+                <span class="software-name">CSI Column</span>
+                <span class="software-category">RC Columns Design</span>
+              </div>
+            </div>
+            <div class="software-item">
+              <div class="software-icon"><i class="fa-solid fa-calculator"></i></div>
+              <div class="software-info">
+                <span class="software-name">Prokon</span>
+                <span class="software-category">RC Member Design</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       WORKFLOW / PROCESS SECTION
+  ============================================================ -->
+  <section id="workflow">
+    <div class="container">
+      <div class="section-ref">
+        <span>SEC-05 / PROCESS</span>
+      </div>
+      <h2 class="section-title reveal">Engineering <em>Process.</em></h2>
+
+      <div class="workflow-steps">
+        <div class="workflow-step reveal">
+          <div class="workflow-step-num">01</div>
+          <div class="workflow-step-title">Brief &amp; Analysis</div>
+          <p class="workflow-step-desc">
+            Understanding the project scope, loads, site conditions, architectural intent,
+            and applicable design codes before any calculations begin.
+          </p>
+        </div>
+        <div class="workflow-step reveal reveal-delay-1">
+          <div class="workflow-step-num">02</div>
+          <div class="workflow-step-title">Structural Modeling</div>
+          <p class="workflow-step-desc">
+            Building precise FEA models in ETABS, SAFE, SAP2000,
+            calibrated to real load paths and structural behavior.
+          </p>
+        </div>
+        <div class="workflow-step reveal reveal-delay-2">
+          <div class="workflow-step-num">03</div>
+          <div class="workflow-step-title">Design &amp; Verification</div>
+          <p class="workflow-step-desc">
+            Iterative design of all structural members — optimized for performance,
+            economy, and constructability. Results verified with Prokon and hand checks.
+          </p>
+        </div>
+        <div class="workflow-step reveal reveal-delay-3">
+          <div class="workflow-step-num">04</div>
+          <div class="workflow-step-title">Drawing Delivery</div>
+          <p class="workflow-step-desc">
+            Full shop drawing packages produced in AutoCAD, ASD, or extracted from Revit.
+            Dimensioned, scheduled, detailed, and construction-ready.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CONTACT SECTION
+  ============================================================ -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-ref">
+        <span>SEC-06 / CONTACT</span>
+      </div>
+      <h2 class="section-title reveal">Let's <em>Build</em><br>Something.</h2>
+
+      <div class="contact-grid">
+        <!-- Left: Info -->
+        <div class="contact-info reveal">
+          <p>
+            Whether you need a structural design package, shop drawings for a project under construction,
+            or a BIM model for coordination — I'm available for freelance engagements, long-term project
+            collaboration, or full-time positions in Egypt, KSA and the UAE.
+          </p>
+
+          <ul class="contact-details">
+            <li class="contact-detail">
+              <div class="contact-detail-icon">✉</div>
+              <div>
+                <span class="contact-detail-label">Email</span>
+                <a href="mailto:kareemtantawy01@gmail.com" class="contact-link">kareemtantawy01@gmail.com</a>
+              </div>
+            </li>
+            <li class="contact-detail">
+              <div class="contact-detail-icon">📍</div>
+              <div>
+                <span class="contact-detail-label">Location</span>
+                <span class="contact-detail-value">Egypt — Available for KSA and UAE Relocation</span>
+              </div>
+            </li>
+            <li class="contact-detail">
+              <div class="contact-detail-icon">🔗</div>
+              <div>
+                <span class="contact-detail-label">LinkedIn</span>
+                <a href="https://linkedin.com/in/kareem-ahmed-tantawy" target="_blank" class="contact-link">linkedin.com/in/kareem-ahmed-tantawy</a>
+              </div>
+            </li>
+            <li class="contact-detail" id="phone-detail">
+              <div class="contact-detail-icon">📱</div>
+              <div>
+                <span class="contact-detail-label">WhatsApp / Phone</span>
+                <span class="contact-detail-value" id="phone-value" style="display: none;">+201092519807</span>
+                <button id="reveal-phone" class="btn-secondary" style="margin-top: 0.5rem; padding: 0.5rem 1rem; font-size: 0.9rem;">Click to Reveal Phone</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Right: Form -->
+        <div class="contact-form reveal reveal-delay-2">
+          <form id="contact-form">
+            <div class="form-group">
+              <label class="form-label">Your Name</label>
+              <input class="form-input" type="text" name="name" placeholder="Engineer / Client name" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input class="form-input" type="email" name="email" placeholder="your@email.com" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Project Type</label>
+              <input class="form-input" type="text" name="project" placeholder="e.g. Shop Drawings / BIM / Structural Design" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Message</label>
+              <textarea class="form-textarea" name="message" placeholder="Describe your project, timeline, and requirements..." required></textarea>
+            </div>
+            <div class="form-submit">
+              <button class="btn-primary" type="submit">
+                <span>Send Message</span>
+                <span>→</span>
+              </button>
+              <button class="btn-secondary" type="button" id="whatsapp-btn" style="margin-left: 1rem;">
+                <span>Send via WhatsApp</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-copy">
+          © 2025 Kareem Ahmed Tantawy — Structural Design Engineer
+        </span>
+        <span class="footer-tagline">
+          "Where Analysis Meets Precision."
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       JAVASCRIPT
+       Custom cursor, nav scroll, skill bars, filter, reveal
+  ============================================================ -->
+  <script>
+    /* ── Custom Cursor ── */
+    const cursor     = document.getElementById('cursor');
+    const cursorRing = document.getElementById('cursorRing');
+    let mx = 0, my = 0;
+    let cx = 0, cy = 0;
+    let rx = 0, ry = 0;
+    let cursorScale = 1;
+    let ringScale = 1;
+    let isDragging = false;
+    let isHovering = false;
+    let animationId;
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+    const lerp = (a, b, n) => (1 - n) * a + n * b;
+
+    function animate() {
+      cx = lerp(cx, mx, 0.2);
+      cy = lerp(cy, my, 0.2);
+      rx = lerp(rx, mx, 0.1);
+      ry = lerp(ry, my, 0.1);
+      cursor.style.transform = `translate3d(${cx - 5}px, ${cy - 5}px, 0) scale(${cursorScale})`;
+      cursorRing.style.transform = `translate3d(${rx - 18}px, ${ry - 18}px, 0) scale(${ringScale})`;
+      animationId = requestAnimationFrame(animate);
+    }
+
+    if (!isTouchDevice) {
+      animate();
+    } else {
+      cursor.style.display = 'none';
+      cursorRing.style.display = 'none';
+    }
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX;
+      my = e.clientY;
+    });
+
+    // Scale on interactive elements
+    document.querySelectorAll('a, button, .project-card, .photo-card, .service-card').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        if (!isTouchDevice) {
+          cursorScale = 1.6;
+          ringScale = 1.67;
+          cursorRing.style.borderColor = 'rgba(232,160,39,0.8)';
+        }
+      });
+      el.addEventListener('mouseleave', () => {
+        if (!isTouchDevice) {
+          cursorScale = 1;
+          ringScale = 1;
+          cursorRing.style.borderColor = 'rgba(232,160,39,0.5)';
+        }
+      });
+    });
+
+    /* ── Navbar scroll effect ── */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    /* ── Gallery drag/swipe with click prevention, vertical‑scroll lock,
+          smooth momentum + automatic snap, and no text selection ── */
+    const galleries = document.querySelectorAll('.photo-gallery');
+
+    galleries.forEach(gallery => {
+      let isDown = false;
+      let activePointerId = null;
+      let startX = 0;
+      let startY = 0;
+      let lastX = 0;
+      let lastY = 0;
+      let lastTime = 0;
+      let scrollLeft = 0;
+      let velocity = 0;
+      let dragDistanceX = 0;
+      let animationId;
+      let resetDragTimer;
+      let isDraggingGallery = false;
+      let pointerCaptured = false;
+      let wasDragged = false;
+      const DRAG_THRESHOLD = 14;
+      const MOMENTUM_THRESHOLD = 0.8;
+      const DRAG_COEFFICIENT = 1.35;
+      const FRICTION = 0.92;
+      const VELOCITY_ALPHA = 0.18;
+
+      function setDragging(active) {
+        gallery.dataset.dragging = active ? 'true' : 'false';
+        if (active) {
+          gallery.style.userSelect = 'none';
+          gallery.style.webkitUserSelect = 'none';
+        } else {
+          gallery.style.userSelect = '';
+          gallery.style.webkitUserSelect = '';
+        }
+      }
+
+      function markDragged() {
+        wasDragged = true;
+        gallery.dataset.dragged = 'true';
+        window.clearTimeout(resetDragTimer);
+        resetDragTimer = window.setTimeout(() => {
+          gallery.dataset.dragged = 'false';
+          wasDragged = false;
+        }, 50);
+      }
+
+      function releaseDrag() {
+        isDown = false;
+        activePointerId = null;
+        gallery.classList.remove('dragging');
+        setDragging(false);
+        isDraggingGallery = false;
+      }
+
+      function onPointerDown(e) {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        isDown = true;
+        activePointerId = e.pointerId;
+        isDragging = true;
+        wasDragged = false;
+        pointerCaptured = false;
+        gallery.classList.add('dragging');
+        setDragging(true);
+
+        startX = e.clientX;
+        startY = e.clientY;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        lastTime = e.timeStamp;
+        scrollLeft = gallery.scrollLeft;
+        velocity = 0;
+        dragDistanceX = 0;
+        cancelAnimationFrame(animationId);
+      }
+
+      function onPointerMove(e) {
+        if (!isDown || e.pointerId !== activePointerId) return;
+        const currentX = e.clientX;
+        const currentY = e.clientY;
+        const dx = currentX - lastX;
+        const dy = currentY - lastY;
+        const dt = Math.max(16, e.timeStamp - lastTime);
+        const moveX = currentX - startX;
+        const moveY = currentY - startY;
+
+        if (!isDraggingGallery && Math.hypot(moveX, moveY) > DRAG_THRESHOLD) {
+          isDraggingGallery = true;
+          wasDragged = true;
+          if (!pointerCaptured) {
+            gallery.setPointerCapture(activePointerId);
+            pointerCaptured = true;
+          }
+        }
+
+        if (isDraggingGallery) {
+          if (Math.abs(moveX) > Math.abs(moveY)) {
+            e.preventDefault();
+          }
+
+          const scrollDelta = (lastX - currentX) * DRAG_COEFFICIENT;
+          gallery.scrollLeft += scrollDelta;
+          velocity = lerp(velocity, scrollDelta * (16 / dt), VELOCITY_ALPHA);
+          dragDistanceX += Math.abs(dx);
+        }
+
+        lastX = currentX;
+        lastY = currentY;
+        lastTime = e.timeStamp;
+      }
+
+      function stopPointerDrag(e) {
+        if (!isDown || e.pointerId !== activePointerId) return;
+        isDragging = false;
+        if (isDraggingGallery && dragDistanceX > DRAG_THRESHOLD) {
+          if (Math.abs(velocity) > MOMENTUM_THRESHOLD) {
+            applyMomentum();
+          } else {
+            snapIfNeeded();
+          }
+          markDragged();
+        } else {
+          snapIfNeeded();
+        }
+        if (pointerCaptured && gallery.hasPointerCapture(activePointerId)) {
+          gallery.releasePointerCapture(activePointerId);
+        }
+        pointerCaptured = false;
+        releaseDrag();
+      }
+
+      gallery.addEventListener('pointerdown', onPointerDown, { passive: false });
+      gallery.addEventListener('pointermove', onPointerMove, { passive: false });
+      gallery.addEventListener('pointerup', stopPointerDrag);
+      gallery.addEventListener('pointercancel', stopPointerDrag);
+      gallery.addEventListener('lostpointercapture', releaseDrag);
+      gallery.addEventListener('dragstart', (e) => e.preventDefault(), { capture: true });
+
+      gallery.addEventListener('wheel', (e) => {
+        if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+          e.preventDefault();
+          gallery.scrollLeft += e.deltaX;
+        }
+      }, { passive: false });
+
+      function applyMomentum() {
+        function step() {
+          gallery.scrollLeft += velocity;
+          velocity *= FRICTION;
+          if (Math.abs(velocity) > 0.35) {
+            animationId = requestAnimationFrame(step);
+          } else {
+            snapIfNeeded();
+          }
+        }
+        animationId = requestAnimationFrame(step);
+      }
+
+      function snapIfNeeded() {
+        requestAnimationFrame(() => {
+          gallery.scrollBy(0, 0);
+        });
+      }
+    });
+    const navToggle = document.getElementById('navToggle');
+    const navLinks  = document.getElementById('navLinks');
+
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+      navToggle.classList.toggle('open');
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        navToggle.classList.remove('open');
+      });
+    });
+
+    /* ── Scroll reveal (IntersectionObserver) ── */
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    reveals.forEach(el => revealObs.observe(el));
+
+    /* ── Skill bar animation ── */
+    const skillBars = document.querySelectorAll('.skill-bar-fill');
+    const skillObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const width = entry.target.getAttribute('data-width');
+          entry.target.style.width = width + '%';
+          skillObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    skillBars.forEach(bar => skillObs.observe(bar));
+
+    /* ── Project filter ── */
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Update active state
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.getAttribute('data-filter');
+
+        projectCards.forEach(card => {
+          const cats = card.getAttribute('data-category') || '';
+          if (filter === 'all' || cats.includes(filter)) {
+            card.style.display = '';
+            card.style.opacity = '0';
+            requestAnimationFrame(() => {
+              card.style.transition = 'opacity 0.4s ease';
+              card.style.opacity = '1';
+            });
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    /* ── Smooth number counter for hero stats ── */
+    function animateCount(el, target, duration = 1500) {
+      let start = 0;
+      const step = (timestamp) => {
+        if (!start) start = timestamp;
+        const progress = Math.min((timestamp - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.floor(eased * target) + (el.dataset.suffix || '+');
+        if (progress < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+    
+
+
+    const statNums = document.querySelectorAll('.hero-stat-num');
+    const targets  = [2, 60, 3, 8];
+    const suffixes = ['+', '+', '', ''];
+
+    const statObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          statNums.forEach((el, i) => {
+            el.dataset.suffix = suffixes[i];
+            animateCount(el, targets[i]);
+          });
+          statObs.disconnect();
+        }
+      });
+    }, { threshold: 0.5 });
+
+    if (statNums[0]) statObs.observe(statNums[0]);
+
+    /* ── Contact functionality ── */
+    // Reveal phone number
+    const revealBtn = document.getElementById('reveal-phone');
+    const phoneValue = document.getElementById('phone-value');
+    if (revealBtn) {
+      revealBtn.addEventListener('click', () => {
+        phoneValue.style.display = 'block';
+        revealBtn.style.display = 'none';
+      });
+    }
+
+    // Lightbox gallery for project photos
+    const photoCards = Array.from(document.querySelectorAll('.photo-card'));
+    const lightbox = document.getElementById('lightbox');
+    const lightboxBackdrop = document.getElementById('lightboxBackdrop');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxPrev = document.getElementById('lightboxPrev');
+    const lightboxNext = document.getElementById('lightboxNext');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+
+    const photoGalleries = {};
+    photoCards.forEach(card => {
+      const gallery = card.dataset.gallery || 'default';
+      photoGalleries[gallery] = photoGalleries[gallery] || [];
+      const index = photoGalleries[gallery].length;
+      card.dataset.index = index;
+      photoGalleries[gallery].push(card);
+
+      card.addEventListener('click', (e) => {
+        const parentGallery = e.currentTarget.closest('.photo-gallery');
+        if (parentGallery && (parentGallery.dataset.dragging === 'true' || parentGallery.dataset.dragged === 'true')) {
+          return;
+        }
+        openLightbox(gallery, index);
+      });
+    });
+
+    function setLightboxContent(card) {
+      const img = card.querySelector('.project-photo');
+      const clone = img.cloneNode(true);
+      clone.style.position = 'absolute';
+      clone.style.inset = '0';
+      clone.style.zIndex = '1';
+      clone.style.pointerEvents = 'none';
+      lightboxImage.innerHTML = '';
+      lightboxImage.appendChild(clone);
+      lightboxCaption.textContent = `${card.dataset.title} — ${card.dataset.location}`;
+    }
+
+    let currentGallery = '';
+    let currentIndex = 0;
+
+    function openLightbox(gallery, index) {
+      currentGallery = gallery;
+      currentIndex = index;
+      const card = photoGalleries[gallery][index];
+      if (!card) return;
+      setLightboxContent(card);
+      lightbox.classList.add('active');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.add('fade-out');
+      setTimeout(() => {
+        lightbox.classList.remove('active', 'fade-out');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }, 300);
+    }
+
+    function navigateLightbox(delta) {
+      const list = photoGalleries[currentGallery] || [];
+      if (!list.length) return;
+      currentIndex = (currentIndex + delta + list.length) % list.length;
+      setLightboxContent(list[currentIndex]);
+    }
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxBackdrop.addEventListener('click', closeLightbox);
+    lightboxPrev.addEventListener('click', () => navigateLightbox(-1));
+    lightboxNext.addEventListener('click', () => navigateLightbox(1));
+    document.addEventListener('keydown', (event) => {
+      if (!lightbox.classList.contains('active')) return;
+      if (event.key === 'Escape') closeLightbox();
+      if (event.key === 'ArrowLeft') navigateLightbox(-1);
+      if (event.key === 'ArrowRight') navigateLightbox(1);
+    });
+
+    // Touch swipe in lightbox
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    lightboxImage.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    lightboxImage.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) navigateLightbox(1);
+        else navigateLightbox(-1);
+      }
+    }, { passive: true });
+
+    // Form submit for email
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+      contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(contactForm);
+        const name = formData.get('name');
+        const email = formData.get('email');
+        const project = formData.get('project');
+        const message = formData.get('message');
+        const subject = `Portfolio Contact: ${project || 'Inquiry'} from ${name}`;
+        const body = `Name: ${name}\nEmail: ${email}\nProject: ${project}\n\nMessage:\n${message}`;
+        const mailtoLink = `mailto:kareemtantawy01@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.location.href = mailtoLink;
+      });
+    }
+
+    // WhatsApp button
+    const whatsappBtn = document.getElementById('whatsapp-btn');
+    if (whatsappBtn) {
+      whatsappBtn.addEventListener('click', () => {
+        const formData = new FormData(contactForm);
+        const name = formData.get('name') || 'Visitor';
+        const message = formData.get('message') || 'Hello, I found your portfolio and would like to discuss a project.';
+        const whatsappText = `Hi Kareem, I'm ${name}. ${message}`;
+        const whatsappLink = `https://wa.me/201092519807?text=${encodeURIComponent(whatsappText)}`;
+        window.open(whatsappLink, '_blank');
+      });
+    }
+  </script>
+
+</body>
+</html>
